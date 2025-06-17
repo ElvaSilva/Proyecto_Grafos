@@ -19,30 +19,22 @@ public class Diccionario {
             this.size = 0;
         }
     
-    public boolean BFS(Palabra word){
+    public void BFS(Palabra word){
         if (this.size == 0){
-            return false;
+            "hay que printear el error";
         }else{
+            long t_o = 0;
+            long t_f = 0;
+            long resul = 0;
+            t_o = System.currentTimeMillis();
             Nodo aux = new Nodo();
             Nodo auxint = new Nodo();
             aux = this.n_first;
             while (aux != null){
-                for (int i_p = 0; i_p <word.info.length(); i_p++){
-                    if (aux.letra == word.info.charAt(i_p)){
-                        aux.enUSo = true;
-                        for (int i=0; i < aux.vecinos.length; i++){
-                            auxint = aux.vecinos[i];
-                            
-                            
-                        }
-                    }else{
-                        aux = aux.vecinos[0];
-                    }
-                } 
                 int cont_p = 0;
                 int cont_n = 0;
-                while (cont_p <= word.info.length()){
-                    if (aux.enUSo == false && aux.letra == word.info.charAt(cont_p)){
+                while (cont_p < word.info.length()){
+                    if (aux.letra == word.info.charAt(cont_p)){
                         aux.enUSo = true;
                         auxint = aux.vecinos[cont_n];
                         cont_p = cont_p + 1;
@@ -56,20 +48,19 @@ public class Diccionario {
                                 if (auxint.enUSo == false && auxint.letra == word.info.charAt(cont_p)){
                                     auxint.enUSo = true;
                                     aux = auxint;
-                                    cont_p = cont_p + 1;
                                     break;
                                 }
                             }
-                        }
-                        cont_p = cont_p + 1;
-                            
-                        
-                            
-                           
+                            cont_n = 0;
+                        }     
                     }else{
                         aux = aux.vecinos[0];
                     }
                 }
+                word.encontrada = true;
+                t_f = System.currentTimeMillis();
+                word.tiempo = t_f - t_o;
+                return;
             }
         }
     }

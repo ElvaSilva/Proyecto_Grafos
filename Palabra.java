@@ -12,7 +12,7 @@ public class Palabra {
     String info;
     Palabra sig;
     boolean encontrada;
-    float tiempo;
+    long tiempo;
 
     public Palabra(String info) {
         this.info = info;
