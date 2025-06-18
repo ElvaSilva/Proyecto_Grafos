@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -30,16 +33,16 @@ public class Interfaz_grafos extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane17 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        mostrar_dic = new javax.swing.JTextArea();
         busq_gen = new javax.swing.JCheckBox();
         busq_esp = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        guardar_dic = new javax.swing.JButton();
+        cargar_dic = new javax.swing.JButton();
+        arbol_bfs = new javax.swing.JButton();
+        palabra_arbol = new javax.swing.JComboBox<>();
+        palabra_busq = new javax.swing.JTextField();
+        DFS = new javax.swing.JButton();
+        BFS = new javax.swing.JButton();
         letra1 = new javax.swing.JLabel();
         letra2 = new javax.swing.JLabel();
         letra3 = new javax.swing.JLabel();
@@ -64,9 +67,9 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, -1, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane17.setViewportView(jTextArea1);
+        mostrar_dic.setColumns(20);
+        mostrar_dic.setRows(5);
+        jScrollPane17.setViewportView(mostrar_dic);
 
         getContentPane().add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 160, 200));
 
@@ -81,31 +84,36 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         busq_esp.setText("Búsqueda específica");
         getContentPane().add(busq_esp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
 
-        jButton1.setText("Guardar diccionario");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 160, -1));
+        guardar_dic.setText("Guardar diccionario");
+        getContentPane().add(guardar_dic, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 160, -1));
 
-        jButton2.setText("Cargar diccionario");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 240, 160, -1));
-
-        jButton5.setText("Arbol de recorrido BFS");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 160, -1));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cargar_dic.setText("Cargar diccionario");
+        cargar_dic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cargar_dicActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, 70, -1));
+        getContentPane().add(cargar_dic, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 240, 160, -1));
 
-        jTextField1.setText("jTextField1");
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 90, -1));
+        arbol_bfs.setText("Arbol de recorrido BFS");
+        getContentPane().add(arbol_bfs, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 160, -1));
 
-        jButton3.setText("DFS");
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+        palabra_arbol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        palabra_arbol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                palabra_arbolActionPerformed(evt);
+            }
+        });
+        getContentPane().add(palabra_arbol, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, 70, -1));
 
-        jButton4.setText("BFS");
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, -1, -1));
+        palabra_busq.setText("jTextField1");
+        getContentPane().add(palabra_busq, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 90, -1));
+
+        DFS.setText("DFS");
+        getContentPane().add(DFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+
+        BFS.setText("BFS");
+        getContentPane().add(BFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, -1, -1));
 
         letra1.setBackground(new java.awt.Color(121, 124, 126));
         letra1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -159,43 +167,43 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         letra9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra9.setText("jLabel1");
         letra9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 50, 50));
+        getContentPane().add(letra9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 50, 50));
 
         letra10.setBackground(new java.awt.Color(121, 124, 126));
         letra10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra10.setText("jLabel1");
         letra10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 50, 50));
+        getContentPane().add(letra10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 50, 50));
 
         letra11.setBackground(new java.awt.Color(121, 124, 126));
         letra11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra11.setText("jLabel1");
         letra11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra11, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 50, 50));
+        getContentPane().add(letra11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 50, 50));
 
         letra12.setBackground(new java.awt.Color(121, 124, 126));
         letra12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra12.setText("jLabel1");
         letra12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra12, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 50, 50));
+        getContentPane().add(letra12, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 50, 50));
 
         letra13.setBackground(new java.awt.Color(121, 124, 126));
         letra13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra13.setText("jLabel1");
         letra13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 50, 50));
+        getContentPane().add(letra13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 50, 50));
 
         letra14.setBackground(new java.awt.Color(121, 124, 126));
         letra14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra14.setText("jLabel1");
         letra14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra14, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 50, 50));
+        getContentPane().add(letra14, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 50, 50));
 
         letra15.setBackground(new java.awt.Color(121, 124, 126));
         letra15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         letra15.setText("jLabel1");
         letra15.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(letra15, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 50, 50));
+        getContentPane().add(letra15, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 50, 50));
 
         letra16.setBackground(new java.awt.Color(121, 124, 126));
         letra16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -206,13 +214,33 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void palabra_arbolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_palabra_arbolActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_palabra_arbolActionPerformed
 
     private void busq_genActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busq_genActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_busq_genActionPerformed
+
+    private void cargar_dicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_dicActionPerformed
+        String aux = "";
+        String texto = "";
+        try{
+            JFileChooser file = new JFileChooser();
+            file.showOpenDialog(this);
+            File archivo = file.getSelectedFile();
+            if(archivo != null){
+                FileReader archivo_2 = new FileReader(archivo);
+                BufferedReader lee = new BufferedReader (archivo_2);
+                while();
+                /**hay que rellenar con la iteracion*/
+            }
+        }
+        catch(IOException ex){
+            JOptionPane.showMessageDialog(null, ex+"" "\nNo se ha encontrado el archivo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            
+        }
+    }//GEN-LAST:event_cargar_dicActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,18 +268,15 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BFS;
+    private javax.swing.JButton DFS;
+    private javax.swing.JButton arbol_bfs;
     private javax.swing.JCheckBox busq_esp;
     private javax.swing.JCheckBox busq_gen;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton cargar_dic;
+    private javax.swing.JButton guardar_dic;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane17;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel letra1;
     private javax.swing.JLabel letra10;
     private javax.swing.JLabel letra11;
@@ -268,5 +293,8 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     private javax.swing.JLabel letra7;
     private javax.swing.JLabel letra8;
     private javax.swing.JLabel letra9;
+    private javax.swing.JTextArea mostrar_dic;
+    private javax.swing.JComboBox<String> palabra_arbol;
+    private javax.swing.JTextField palabra_busq;
     // End of variables declaration//GEN-END:variables
 }

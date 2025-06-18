@@ -21,7 +21,7 @@ public class Diccionario {
     
     public void BFS(Palabra word){
         if (this.size == 0){
-            "hay que printear el error";
+            /**hay que printear el error"*/
         }else{
             long t_o = 0;
             long t_f = 0;
