@@ -12,18 +12,20 @@ public class Nodo {
     char letra;
     boolean enUSo;
     Nodo[] vecinos;
+    int num;
 
     public Nodo() {
         this.letra = '\0';
         this.enUSo = false;
-        this.vecinos = null;
+        this.vecinos = new Nodo[8];
+        this.num = 0;
     }
 
-    
-    public Nodo(char letra, int numVecinos) {
+    public Nodo(char letra) {
         this.letra = letra;
         this.enUSo = false;
-        this.vecinos = new Nodo[numVecinos];
+        this.vecinos = new Nodo[8];
+        this.num =0;
     }
     
     

@@ -13,9 +13,9 @@ public class Diccionario {
     Nodo n_first;
     int size;
 
-        public Diccionario(Palabra p_first, Nodo n_first) {
-            this.p_first = p_first;
-            this.n_first = n_first;
+        public Diccionario() {
+            this.p_first = null;
+            this.n_first = null;
             this.size = 0;
         }
     
@@ -45,7 +45,7 @@ public class Diccionario {
                             while (cont_n <= aux.vecinos.length){
                                 cont_n = cont_n +1;
                                 auxint = aux.vecinos[cont_n];
-                                if (auxint.enUSo == false && auxint.letra == word.info.charAt(cont_p)){
+                                if ((auxint.enUSo == false) && (auxint.letra == word.info.charAt(cont_p))){
                                     auxint.enUSo = true;
                                     aux = auxint;
                                     break;
@@ -54,7 +54,11 @@ public class Diccionario {
                             cont_n = 0;
                         }     
                     }else{
-                        aux = aux.vecinos[0];
+                        if(aux.num != 16){
+                            aux = aux.vecinos[0];
+                        }else{
+                            return;
+                        }
                     }
                 }
                 word.encontrada = true;
@@ -62,6 +66,56 @@ public class Diccionario {
                 word.tiempo = t_f - t_o;
                 return;
             }
+        }
+    }
+
+    public void poner_vecinos(){
+        Nodo let_1 = new Nodo();
+        Nodo let_2 = new Nodo();
+        while(let_1.num <= 16){
+            while(let_2.num <= 16){
+                if(let_1.num == 1 || let_1.num == 4 || let_1.num == 13 || let_1.num == 16){
+                    if(let_1.num == 1 && let_2.num == (let_1.num +4)){
+                        let_1.vecinos[1] = let_2;
+                    }
+                    if(let_1.num == 1 && let_2.num == (let_1.num +5))
+                    if(let_1.num == 4 && let_2.num == (let_1.num +4)){
+                        let_1.vecinos[1] = let_2;
+                    }
+                    if(let_1.num == 4 && let_2.num == (let_1.num +4)){
+                        let_1.vecinos[1] = let_2;
+                    }{
+                        let_1.vecinos[2] = let_2;
+                    }
+                }else if(let_1.num == 6 || let_1.num == 7 || let_1.num == 10 || let_1.num == 11){
+                    if(let_2.num == (let_1.num + 3)){
+                        let_1.vecinos[1] = let_2;
+                    }
+                    if(let_2.num == (let_1.num + 4)){
+                        let_1.vecinos[2] = let_2;
+                    }
+                    if(let_2.num == (let_1.num + 5)){
+                        let_1.vecinos[3] = let_2;
+                    }
+                    if(let_2.num == (let_1.num - 5)){
+                        let_1.vecinos[4] = let_2;
+                    }
+                    if(let_2.num == (let_1.num - 4)){
+                        let_1.vecinos[5] = let_2;
+                    }
+                    if(let_2.num == (let_1.num - 3)){
+                        let_1.vecinos[6] = let_2;
+                    }
+                    if(let_2.num == (let_1.num - 1)){
+                        let_1.vecinos[7] = let_2;
+                    }
+                    
+                }else{
+                    
+                }
+                let_2 = let_2.vecinos[0];
+            }
+            let_1 = let_1.vecinos[0];
         }
     }
 }

@@ -20,6 +20,15 @@ public class Palabra {
         this.encontrada = false;
         this.tiempo = 0;
     }
+
+    public Palabra() {
+        this.info = null;
+        this.sig = null;
+        this.encontrada = false;
+        this.tiempo = 0;
+    }
+    
+    
     
     
 }

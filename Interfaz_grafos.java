@@ -1,5 +1,8 @@
+package proyecto_grafos;
+
 
 import javax.swing.JOptionPane;
+import java.io.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -223,8 +226,12 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     }//GEN-LAST:event_busq_genActionPerformed
 
     private void cargar_dicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_dicActionPerformed
-        String aux = "";
-        String texto = "";
+        Nodo let_2 = new Nodo();
+        String[] texto = null;
+        int aux_num = 0;
+        int aux_num2 = 0;
+        Palabra pal_2 = new Palabra();
+        Diccionario dic = new Diccionario();
         try{
             JFileChooser file = new JFileChooser();
             file.showOpenDialog(this);
@@ -232,7 +239,55 @@ public class Interfaz_grafos extends javax.swing.JFrame {
             if(archivo != null){
                 FileReader archivo_2 = new FileReader(archivo);
                 BufferedReader lee = new BufferedReader (archivo_2);
-                while();
+                while(lee.readLine()!=null){
+                    if(lee.readLine() == "dic"){
+                        aux_num = aux_num + 1;
+                    }
+                    if(lee.readLine() == "tab"){
+                        aux_num = aux_num + 1;
+                    }
+                    while((lee.readLine() != "/dic") || (lee.readLine() != "/tab")){
+                        if(aux_num == 1){
+                            Palabra word = new Palabra(lee.readLine());
+                            if(dic.p_first == null){
+                                dic.p_first = word;
+                            }else{
+                                pal_2 = dic.p_first;
+                                if(pal_2.sig == null){
+                                    pal_2.sig = word;
+                                }else{
+                                    while(pal_2.sig!=null){
+                                        pal_2 = pal_2.sig;
+                                    }
+                                    pal_2.sig = word;
+                                }
+                            }
+                        }
+                        if(aux_num == 2){
+                            texto = lee.readLine().split(",");
+                            for(int i = 0; i < texto.length; i ++){
+                                Nodo letter = new Nodo(texto[i].charAt(0));
+                                if(dic.n_first == null){
+                                    dic.n_first = letter;
+                                }else{
+                                    let_2 = dic.n_first;
+                                    if(let_2.vecinos[0] == null){
+                                        let_2.vecinos[0] = letter;
+                                        /**creo q es redundante tengo q revisar*/
+                                    }else{
+                                        while(let_2.vecinos[0] != null){
+                                            aux_num2 = aux_num2 + 1;
+                                            let_2.num = aux_num2;
+                                            let_2 = let_2.vecinos[0];
+                                        }
+                                        let_2.vecinos[0] = letter;
+                                        aux_num = aux_num + 1;
+                                    }
+                                }
+                            }   
+                        }
+                    }
+                }
                 /**hay que rellenar con la iteracion*/
             }
         }
