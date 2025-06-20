@@ -13,12 +13,14 @@ public class Nodo {
     boolean enUSo;
     Nodo[] vecinos;
     int num;
+    Nodo sig;
 
     public Nodo() {
         this.letra = '\0';
         this.enUSo = false;
         this.vecinos = new Nodo[8];
         this.num = 0;
+        this.sig = null;
     }
 
     public Nodo(char letra) {
@@ -26,6 +28,7 @@ public class Nodo {
         this.enUSo = false;
         this.vecinos = new Nodo[8];
         this.num =0;
+        this.sig = null;
     }
     
     

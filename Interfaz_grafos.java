@@ -85,6 +85,11 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         getContentPane().add(busq_gen, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, -1));
 
         busq_esp.setText("Búsqueda específica");
+        busq_esp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                busq_espActionPerformed(evt);
+            }
+        });
         getContentPane().add(busq_esp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
 
         guardar_dic.setText("Guardar diccionario");
@@ -116,6 +121,11 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         getContentPane().add(DFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         BFS.setText("BFS");
+        BFS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BFSActionPerformed(evt);
+            }
+        });
         getContentPane().add(BFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, -1, -1));
 
         letra1.setBackground(new java.awt.Color(121, 124, 126));
@@ -222,80 +232,26 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     }//GEN-LAST:event_palabra_arbolActionPerformed
 
     private void busq_genActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busq_genActionPerformed
-        // TODO add your handling code here:
+        int cont = 1;
     }//GEN-LAST:event_busq_genActionPerformed
 
     private void cargar_dicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_dicActionPerformed
-        Nodo let_2 = new Nodo();
-        String[] texto = null;
-        int aux_num = 0;
-        int aux_num2 = 0;
-        Palabra pal_2 = new Palabra();
         Diccionario dic = new Diccionario();
-        try{
-            JFileChooser file = new JFileChooser();
-            file.showOpenDialog(this);
-            File archivo = file.getSelectedFile();
-            if(archivo != null){
-                FileReader archivo_2 = new FileReader(archivo);
-                BufferedReader lee = new BufferedReader (archivo_2);
-                while(lee.readLine()!=null){
-                    if(lee.readLine() == "dic"){
-                        aux_num = aux_num + 1;
-                    }
-                    if(lee.readLine() == "tab"){
-                        aux_num = aux_num + 1;
-                    }
-                    while((lee.readLine() != "/dic") || (lee.readLine() != "/tab")){
-                        if(aux_num == 1){
-                            Palabra word = new Palabra(lee.readLine());
-                            if(dic.p_first == null){
-                                dic.p_first = word;
-                            }else{
-                                pal_2 = dic.p_first;
-                                if(pal_2.sig == null){
-                                    pal_2.sig = word;
-                                }else{
-                                    while(pal_2.sig!=null){
-                                        pal_2 = pal_2.sig;
-                                    }
-                                    pal_2.sig = word;
-                                }
-                            }
-                        }
-                        if(aux_num == 2){
-                            texto = lee.readLine().split(",");
-                            for(int i = 0; i < texto.length; i ++){
-                                Nodo letter = new Nodo(texto[i].charAt(0));
-                                if(dic.n_first == null){
-                                    dic.n_first = letter;
-                                }else{
-                                    let_2 = dic.n_first;
-                                    if(let_2.vecinos[0] == null){
-                                        let_2.vecinos[0] = letter;
-                                        /**creo q es redundante tengo q revisar*/
-                                    }else{
-                                        while(let_2.vecinos[0] != null){
-                                            aux_num2 = aux_num2 + 1;
-                                            let_2.num = aux_num2;
-                                            let_2 = let_2.vecinos[0];
-                                        }
-                                        let_2.vecinos[0] = letter;
-                                        aux_num = aux_num + 1;
-                                    }
-                                }
-                            }   
-                        }
-                    }
-                }
-                /**hay que rellenar con la iteracion*/
+        dic = dic.subir_dic();
+    }//GEN-LAST:event_cargar_dicActionPerformed
+
+    private void busq_espActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busq_espActionPerformed
+        int cont = 2;
+    }//GEN-LAST:event_busq_espActionPerformed
+
+    private void BFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BFSActionPerformed
+        if(cont == 1){
+            Palabra pointer = new Palabra();
+            while(pointer.sig != null){
+                dic.BFS(pointer);
             }
         }
-        catch(IOException ex){
-            JOptionPane.showMessageDialog(null, ex+"" "\nNo se ha encontrado el archivo", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            
-        }
-    }//GEN-LAST:event_cargar_dicActionPerformed
+    }//GEN-LAST:event_BFSActionPerformed
 
     /**
      * @param args the command line arguments
