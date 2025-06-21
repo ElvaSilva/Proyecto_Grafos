@@ -10,6 +10,8 @@ package boceto.de.proyecto;
  */
 
 public class ArchivoException extends Exception {
+
+    private static final long serialVersionUID = 1L;
     public ArchivoException(String message) {
         super(message);
     }
