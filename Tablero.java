@@ -9,148 +9,105 @@ package boceto.de.proyecto;
  * @author elohym
  */
 
+// Archivo: Tablero.java
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Arrays;
 
-public class Tablero { // Cambiado a 'Tablero' para consistencia
+public class Tablero {
+    private static final int FILAS = 4;
+    private static final int COLUMNAS = 4;
+    private Nodo[][] nodos; // Matriz de nodos
 
-    private final Nodo[][] cuadricula; // Cambiado a 'cuadricula' y hecho 'final'
-    private final int tamano; // Cambiado a 'tamano' y hecho 'final'
-
-    // Constructor que recibe una matriz de caracteres para inicializar el tablero
-    public Tablero(char[][] letras) {
-        // Validación básica del tamaño del tablero
-        if (letras == null || letras.length != 4 || letras[0].length != 4) {
-            throw new IllegalArgumentException("El tablero debe ser de 4x4.");
-        }
-
-        this.tamano = 4; // Tamaño fijo según el requerimiento
-        this.cuadricula = new Nodo[tamano][tamano];
-
-        inicializarCuadricula(letras); // Inicializa los nodos en la cuadrícula
-        construirGrafo(); // Establece las relaciones de adyacencia entre los nodos
+    public Tablero() {
+        this.nodos = new Nodo[FILAS][COLUMNAS];
     }
 
     /**
-     * Inicializa cada celda de la cuadrícula con un nuevo objeto Nodo,
-     * asignando la letra y sus coordenadas (fila, columna).
+     * Carga el tablero a partir de una lista de cadenas, donde cada cadena representa una fila.
+     * Los caracteres de cada línea se usan para crear los Nodos.
      *
-     * @param letras Matriz de caracteres 4x4 con las letras del tablero.
+     * @param lineasTablero Una lista de 4 cadenas, cada una con 4 caracteres (espacios se ignoran).
+     * @throws IllegalArgumentException Si el formato de las líneas es incorrecto.
      */
-    private void inicializarCuadricula(char[][] letras) {
-        for (int i = 0; i < tamano; i++) {
-            for (int j = 0; j < tamano; j++) {
-                // Se asegura que la letra se convierta a mayúscula al crear el Nodo
-                // Esto es útil si las letras de entrada pueden ser minúsculas,
-                // manteniendo consistencia para la búsqueda de palabras.
-                cuadricula[i][j] = new Nodo(letras[i][j], i, j);
+    public void cargarDesdeLineas(List<String> lineasTablero) throws IllegalArgumentException {
+        if (lineasTablero == null || lineasTablero.size() != FILAS) {
+            throw new IllegalArgumentException("El archivo del tablero debe contener exactamente " + FILAS + " filas.");
+        }
+
+        // Limpiar y re-inicializar el tablero
+        this.nodos = new Nodo[FILAS][COLUMNAS];
+
+        for (int i = 0; i < FILAS; i++) {
+            String lineaLimpia = lineasTablero.get(i).replaceAll("\\s+", "").toUpperCase(); // Eliminar espacios y mayúsculas
+            if (lineaLimpia.length() != COLUMNAS) {
+                throw new IllegalArgumentException("La fila " + (i + 1) + " del tablero debe contener exactamente " + COLUMNAS + " letras.");
+            }
+            for (int j = 0; j < COLUMNAS; j++) {
+                nodos[i][j] = new Nodo(lineaLimpia.charAt(j), i, j);
             }
         }
+        conectarVecinos(); // Una vez cargados todos los nodos, establecer sus vecinos
     }
 
     /**
-     * Establece las relaciones de adyacencia (vecinos) para cada nodo en el tablero.
-     * Considera todas las 8 direcciones posibles (horizontal, vertical, diagonal).
+     * Establece las conexiones de adyacencia (vecinos) para cada nodo en el tablero.
+     * Considera vecinos horizontales, verticales y diagonales.
      */
-    private void construirGrafo() {
-        // Desplazamientos para las 8 direcciones (dx para fila, dy para columna)
-        // Arriba-izquierda, Arriba, Arriba-derecha, Derecha, Abajo-derecha, Abajo, Abajo-izquierda, Izquierda
-        int[] df = {-1, -1, -1, 0, 1, 1, 1, 0}; // delta fila
-        int[] dc = {-1, 0, 1, 1, 1, 0, -1, -1}; // delta columna
+    private void conectarVecinos() {
+        for (int i = 0; i < FILAS; i++) {
+            for (int j = 0; j < COLUMNAS; j++) {
+                Nodo nodoActual = nodos[i][j];
+                // Recorrer los 8 posibles vecinos
+                for (int di = -1; di <= 1; di++) {
+                    for (int dj = -1; dj <= 1; dj++) {
+                        if (di == 0 && dj == 0) continue; // No es el propio nodo
 
-        for (int i = 0; i < tamano; i++) {
-            for (int j = 0; j < tamano; j++) {
-                Nodo nodoActual = cuadricula[i][j];
-                for (int d = 0; d < df.length; d++) {
-                    int nuevaFila = i + df[d];
-                    int nuevaColumna = j + dc[d];
+                        int ni = i + di; // Nueva fila
+                        int nj = j + dj; // Nueva columna
 
-                    // Verifica que las nuevas coordenadas estén dentro de los límites del tablero
-                    if (esCoordenadaValida(nuevaFila, nuevaColumna)) {
-                        nodoActual.agregarVecino(cuadricula[nuevaFila][nuevaColumna]);
+                        // Verificar que el vecino esté dentro de los límites del tablero
+                        if (ni >= 0 && ni < FILAS && nj >= 0 && nj < COLUMNAS) {
+                            nodoActual.agregarVecino(nodos[ni][nj]);
+                        }
                     }
                 }
             }
         }
     }
 
-    /**
-     * Verifica si un par de coordenadas (fila, columna) está dentro de los límites del tablero.
-     *
-     * @param fila La fila a verificar.
-     * @param columna La columna a verificar.
-     * @return true si las coordenadas son válidas, false en caso contrario.
-     */
-    private boolean esCoordenadaValida(int fila, int columna) {
-        return fila >= 0 && fila < tamano && columna >= 0 && columna < tamano;
-    }
-
-    /**
-     * Obtiene el Nodo en las coordenadas especificadas.
-     *
-     * @param fila La fila del nodo.
-     * @param columna La columna del nodo.
-     * @return El Nodo en las coordenadas dadas, o null si las coordenadas son inválidas.
-     */
-    public Nodo obtenerNodo(int fila, int columna) { // Cambiado a 'obtenerNodo'
-        if (esCoordenadaValida(fila, columna)) {
-            return cuadricula[fila][columna];
+    public Nodo getNodo(int fila, int columna) {
+        if (fila >= 0 && fila < FILAS && columna >= 0 && columna < COLUMNAS) {
+            return nodos[fila][columna];
         }
         return null;
     }
 
     /**
-     * Devuelve una lista de todos los Nodos en el tablero.
-     * Esto es útil para iniciar búsquedas desde cada posible Nodo del tablero.
-     *
-     * @return Una lista inmutable de todos los Nodos del tablero.
+     * Retorna una lista de todos los nodos en el tablero.
+     * @return List<Nodo> de todos los nodos.
      */
     public List<Nodo> obtenerTodosLosNodos() {
-        List<Nodo> todosLosNodos = new ArrayList<>();
-        for (int i = 0; i < tamano; i++) {
-            for (int j = 0; j < tamano; j++) {
-                todosLosNodos.add(cuadricula[i][j]);
-            }
+        List<Nodo> allNodes = new ArrayList<>();
+        for (int i = 0; i < FILAS; i++) {
+            allNodes.addAll(Arrays.asList(nodos[i]).subList(0, COLUMNAS));
         }
-        return Collections.unmodifiableList(todosLosNodos); // Devuelve una lista inmutable
+        return allNodes;
     }
 
     /**
-     * Devuelve el tamaño del tablero (lado).
-     *
-     * @return El tamaño del tablero.
+     * Retorna una representación en String del tablero para mostrar en la GUI.
+     * @return String que representa el tablero.
      */
-    public int getTamano() {
-        return tamano;
-    }
-
-    /**
-     * Muestra el tablero en la consola.
-     * Nota: Según los requerimientos, la salida final debe ser en la interfaz gráfica,
-     * pero este método es útil para depuración.
-     */
-    public void mostrarTableroConsola() { // Cambiado a 'mostrarTableroConsola'
-        System.out.println("Tablero:");
-        for (int i = 0; i < tamano; i++) {
-            for (int j = 0; j < tamano; j++) {
-                System.out.print(cuadricula[i][j].getLetra() + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    // Opcional: Si el tablero necesita una representación de cadena completa (ej. para la interfaz gráfica)
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tamano; i++) {
-            for (int j = 0; j < tamano; j++) {
-                sb.append(cuadricula[i][j].getLetra()).append(" ");
+        for (int i = 0; i < FILAS; i++) {
+            for (int j = 0; j < COLUMNAS; j++) {
+                sb.append(nodos[i][j].getLetra()).append(" ");
             }
             sb.append("\n");
         }
         return sb.toString();
     }
-
 }
