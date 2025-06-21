@@ -2,165 +2,252 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package boceto.de.proyecto;
+package proyecto_grafos;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author elohym
+ * @author elva
  */
+public class Diccionario {
+    Palabra p_first;
+    Nodo n_first;
+    int size;
 
-import java.text.Normalizer; // Para manejar acentos
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-public final class Diccionario { // Cambiado a 'Diccionario' para consistencia
-
-    // Conjunto de palabras del diccionario. Se hace 'final' para asegurar que la referencia
-    // al HashSet no cambie después de la inicialización.
-    private final Set<String> palabras;
-
-    public Diccionario() {
-        this.palabras = new HashSet<>();
-    }
-
-    /**
-     * Constructor que permite inicializar el diccionario con un conjunto preexistente de palabras.
-     * Útil si las palabras son leídas por otra clase (ej. GestionDeArchivos) y pasadas aquí.
-     *
-     * @param palabrasIniciales Un conjunto de cadenas a añadir al diccionario.
+        public Diccionario() {
+            this.p_first = null;
+            this.n_first = null;
+            this.size = 0;
+        }
+    
+    /**Se itera el grafo, realizando comparaciones con cada letra de la palabra.
+     * El loop externo cambia al siguiente nodo y el loop interno revisa cada uno 
+     * de los vecinos.
+     * @param word Se recibe un objeto de tipo Palabra.
      */
-    public Diccionario(Set<String> palabrasIniciales) {
-        this(); // Llama al constructor por defecto para inicializar 'palabras'
-        if (palabrasIniciales != null) {
-            // Se añaden las palabras, asegurando normalización y validación.
-            for (String palabra : palabrasIniciales) {
-               
-                agregarPalabra(palabra);
+    public void BFS(Palabra word){
+        if (this.size == 0){
+            JOptionPane.showInternalMessageDialog(parentComponent, size);
+        }else{
+            long t_o = 0;
+            long t_f = 0;
+            long resul = 0;
+            t_o = System.currentTimeMillis();
+            Nodo aux = new Nodo();
+            Nodo auxint = new Nodo();
+            Nodo reset = new Nodo();
+            aux = this.n_first;
+            while (aux != null){
+                int cont_p = 0;
+                int cont_n = 0;
+                while (cont_p < word.info.length()){
+                    if (aux.letra == word.info.charAt(cont_p)){
+                        aux.enUSo = true;
+                        auxint = aux.vecinos[cont_n];
+                        cont_p = cont_p + 1;
+                            while (cont_n < aux.vecinos.length){
+                                auxint = aux.vecinos[cont_n];
+                                if ((auxint.enUSo == false) && (auxint.letra == word.info.charAt(cont_p))){
+                                    auxint.enUSo = true;
+                                    aux = auxint;
+                                    if(cont_n == (word.info.length() - 1)){
+                                        word.encontrada = true;
+                                        t_f = System.currentTimeMillis();
+                                        word.tiempo = t_f - t_o;
+                                        while(reset.sig != null){
+                                        reset.enUSo = false;
+                                        reset = reset.sig;
+                                        }
+                                        return;
+                                    }
+                                    break;
+                                }
+                                if(cont_n == aux.vecinos.length && auxint.enUSo == false){
+                                    reset = this.n_first;
+                                    while(reset.sig != null){
+                                        reset.enUSo = false;
+                                        reset = reset.sig;
+                                    }
+                                }
+                                    
+                                cont_n = cont_n +1;
+                            }
+                            cont_n = 0;     
+                    }else{
+                        if(aux.sig != null){
+                            aux = aux.sig;
+                        }else{
+                            return;
+                        }
+                    }   
+                }
             }
         }
     }
 
-    /**
-     * Limpia el diccionario actual y carga palabras desde un archivo.
-     * Esta clase no debería manejar directamente la apertura/cierre del archivo.
-     * En su lugar, debería recibir una lista de palabras ya leídas por 'GestionDeArchivos'.
-     * O, alternativamente, 'GestionDeArchivos' llama a 'agregarPalabra' por cada línea leída.
-     *
-     * @param palabrasLeidasUnaPorUna Lista de palabras leídas del archivo.
+    /**Se recorren los nodos, que se encuentran unidos como lista simple para inicializar
+     * la lista de adyacencia de cada uno. La lista de vecinos de algunos nodos no esta 
+     * "completa" porque se encuentran en las esquinas o lados del grafo.
      */
-    public void cargarPalabras(List<String> palabrasLeidasUnaPorUna) {
-        this.palabras.clear(); // Limpia el diccionario actual antes de cargar nuevas palabras
-        if (palabrasLeidasUnaPorUna != null) {
-            for (String linea : palabrasLeidasUnaPorUna) {
-                // Normaliza y agrega cada palabra.
-                agregarPalabra(linea); // Reutiliza la lógica de agregarPalabra
+    public void poner_vecinos(){
+        Nodo let_1 = new Nodo();
+        Nodo let_2 = new Nodo();
+        while(let_1.num <= 16){
+            while(let_2.num <= 16){
+                if(let_2.num == (let_1.num + 1)){
+                    if(let_1.num != 4 || let_1.num != 8 || let_1.num != 12 || let_1.num != 16){
+                        let_1.vecinos[0] = let_2;
+                    }
+                }
+                if(let_2.num == (let_1.num + 3)){
+                    if(let_1.num != 1 || let_1.num != 5 || let_1.num != 9 || let_1.num != 13){
+                        if(let_1.num != 14 || let_1.num != 15 || let_1.num != 16){
+                            let_1.vecinos[1] = let_2;
+                        }
+                    }
+                }
+                if(let_2.num == (let_1.num + 4)){
+                    if(let_1.num != 13 || let_1.num != 14 || let_1.num != 15 || let_1.num != 16){
+                        let_1.vecinos[2] = let_2;
+                    }
+                }
+                if(let_2.num == (let_1.num + 5)){
+                    if(let_1.num != 4 || let_1.num != 8 || let_1.num != 12 || let_1.num != 16){
+                        if(let_1.num != 13 || let_1.num != 14 || let_1.num != 15){
+                            let_1.vecinos[3] = let_2;
+                        }
+                    }
+                }
+                if(let_2.num == (let_1.num - 5)){
+                    if(let_1.num != 1 || let_1.num != 2 || let_1.num != 3 || let_1.num != 4){
+                        if(let_1.num != 5 || let_1.num != 9 || let_1.num != 13){
+                            let_1.vecinos[4] = let_2;
+                        }
+                    }
+                }
+                if(let_2.num == (let_1.num - 4)){
+                    if(let_1.num != 1 || let_1.num != 2 || let_1.num != 3 || let_1.num != 4){
+                        let_1.vecinos[5] = let_2;
+                    }
+                }
+                if(let_2.num == (let_1.num - 3)){
+                    if(let_1.num != 1 || let_1.num != 2 || let_1.num != 3 || let_1.num != 4){
+                        if(let_1.num != 8 || let_1.num != 12 || let_1.num != 16){
+                            let_1.vecinos[6] = let_2;
+                        }
+                    }
+                }
+                if(let_2.num == (let_1.num - 1)){
+                    if(let_1.num != 1 || let_1.num != 5 || let_1.num != 9 || let_1.num != 13){
+                        let_1.vecinos[7] = let_2;
+                    }
+                }
+                let_2 = let_2.sig;
             }
+            let_1 = let_1.sig;
         }
-    }
-
-    /**
-     * Verifica si una palabra (ignorando mayúsculas/minúsculas y acentos) está en el diccionario.
-     *
-     * @param palabra La palabra a verificar.
-     * @return true si la palabra existe en el diccionario, false en caso contrario.
-     */
-    public boolean contiene(String palabra) { // Cambiado a 'contiene'
-        if (palabra == null || palabra.trim().isEmpty()) {
-            return false;
-        }
-        // Normaliza la palabra de entrada antes de buscarla
-        String palabraNormalizada = normalizarPalabra(palabra);
-        return palabras.contains(palabraNormalizada);
-    }
-
-    /**
-     * Agrega una nueva palabra al diccionario, si cumple con los criterios.
-     * La palabra se normaliza (sin acentos, mayúsculas) y se verifica su longitud.
-     *
-     * @param palabra La palabra a agregar.
-     * @return true si la palabra fue agregada, false si no cumple los requisitos o ya existía.
-     */
-    public boolean agregarPalabra(String palabra) { // Cambiado a 'agregarPalabra'
-        if (palabra == null || palabra.trim().isEmpty()) {
-            return false;
-        }
-
-        String palabraNormalizada = normalizarPalabra(palabra);
-
-        // La palabra debe tener al menos 3 letras, según el requerimiento
-        if (palabraNormalizada.length() < 3) {
-            // No se imprime por consola. En un contexto GUI, esto se comunicaría a la interfaz.
-            // System.out.println("La palabra '" + palabra + "' debe tener al menos 3 letras para ser agregada.");
-            return false;
-        }
-        return this.palabras.add(palabraNormalizada); // add() retorna true si se añade, false si ya existía
-    }
-
-    /**
-     * Guardar el diccionario actualizado en un archivo.
-     * Similar a 'loadFromFile', esta operación debería ser coordinada por 'GestionDeArchivos'.
-     * Aquí simplemente proporcionamos las palabras para que 'GestionDeArchivos' las escriba.
-     *
-     * @return Un conjunto inmutable de todas las palabras en el diccionario.
-     */
-    public Set<String> obtenerTodasLasPalabras() { // Cambiado a 'obtenerTodasLasPalabras'
-        // Devolvemos una vista inmutable para proteger el conjunto interno.
-        return Collections.unmodifiableSet(palabras);
-    }
-
-    /**
-     * Normaliza una palabra: la convierte a mayúsculas y remueve acentos.
-     * Esto asegura que las palabras en el diccionario y las buscadas sean consistentes.
-     *
-     * @param palabra La palabra a normalizar.
-     * @return La palabra normalizada.
-     */
-    String normalizarPalabra(String palabra) {
-        String normalizada = Normalizer.normalize(palabra, Normalizer.Form.NFD);
-        // Elimina diacríticos (acentos) y convierte a mayúsculas
-        return normalizada.replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toUpperCase();
-    }
-
-    /**
-     * Devuelve el número de palabras en el diccionario.
-     * @return El tamaño del diccionario.
-     */
-    public int getTamano() {
-        return palabras.size();
-    }
-
-    // Opcional: Método toString para depuración o visualización en la interfaz
-    @Override
-    public String toString() {
-        // Formato para mostrar en la interfaz, por ejemplo, en un JTextArea
-        return palabras.stream()
-                       .collect(Collectors.joining("\n"));
     }
     
-    /**
-     * Verifica si una cadena es un prefijo de alguna palabra en el diccionario.
-     * Esta implementación es O(N*L) donde N es el número de palabras y L la longitud,
-     * un Trie lo haria en O(L).
-     * 
-     * @param prefijo la cadena verificar.
-     * @return true si es un prefijo de alguna palabra, false en lo contrario. 
+    /**Se genera una pantalla en la que se puede seleccionar el archivo y luego 
+     * se van a generar palabras y nodos de acuerdo al archivo.
+     * @return String[] se devuelve un arreglo con las letras
      */
-    
-    public boolean esPrefijo(String prefijo) {
-        if (prefijo == null || prefijo.isEmpty()) {
-            return true; // Cadena vacía es prefijo de todo
-        }
-        String prefijoNormalizado = normalizarPalabra(prefijo);
-        for (String palabraDiccionario : palabras) {
-            if (palabraDiccionario.startsWith(prefijoNormalizado)) {
-                return true;
+    public String[] subir_dic(){
+        Nodo let_2 = new Nodo();
+        String[] texto = null;
+        int aux_num = 0;
+        int aux_num2 = 0;
+        Palabra pal_2 = new Palabra();
+        try{
+            JFileChooser file = new JFileChooser();
+            file.showOpenDialog(this);
+            File archivo = file.getSelectedFile();
+            if(archivo != null){
+                FileReader archivo_2 = new FileReader(archivo);
+                BufferedReader lee = new BufferedReader (archivo_2);
+                while(lee.readLine()!=null){
+                    if(lee.readLine() == "dic"){
+                        aux_num = aux_num + 1;
+                    }
+                    if(lee.readLine() == "tab"){
+                        aux_num = aux_num + 1;
+                    }
+                    while((lee.readLine() != "/dic") || (lee.readLine() != "/tab")){
+                        if(aux_num == 1){
+                            Palabra word = new Palabra(lee.readLine());
+                            if(this.p_first == null){
+                                this.p_first = word;
+                            }else{
+                                pal_2 = this.p_first;
+                                while(pal_2.sig!=null){
+                                    pal_2 = pal_2.sig;
+                                }
+                                pal_2.sig = word;
+                            }
+                        }
+                        if(aux_num == 2){
+                            texto = lee.readLine().split(",");
+                            for(int i = 0; i < texto.length; i ++){
+                                Nodo letter = new Nodo(texto[i].charAt(0));
+                                if(this.n_first == null){
+                                    this.n_first = letter;
+                                }else{
+                                    let_2 = this.n_first;
+                                    while(let_2.sig != null){
+                                        aux_num2 = aux_num2 + 1;
+                                        let_2.num = aux_num2;
+                                        let_2 = let_2.sig;
+                                    }
+                                    let_2.sig = letter;
+                                    aux_num = aux_num + 1;
+                                }
+                            }
+                        }   
+                    }
+                    lee.close();
+                }
             }
+            this.poner_vecinos();
+        }catch(IOException e){
+            JOptionPane.showMessageDialog(parentComponent, size);
+            
         }
-        return false;
+        return texto;
     }
-
-   
+    
+    public void existe(Palabra word){
+        boolean exist = false;
+        Palabra aux = new Palabra();
+        aux = this.p_first;
+        while (aux.sig != null){
+            if(aux.info.equals(word.info)){
+                exist = true;
+            }
+            aux = aux.sig;
+        }
+        if(exist == false){
+            while(aux.sig != null){
+                aux = aux.sig;
+            }
+            word = aux.sig;
+        }
     }
+    
+    public String mostrarPalabras(){
+        Palabra aux = this.p_first;
+        String text = "";
+        while(aux.sig != null){
+            if(aux == this.p_first){
+                text = aux.info;
+            }
+            text = text + "/n" + aux.info;
+        }
+        return text;
+    }
+}

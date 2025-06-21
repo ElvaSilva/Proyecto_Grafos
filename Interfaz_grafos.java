@@ -15,6 +15,10 @@ import java.io.*;
  * @author elva
  */
 public class Interfaz_grafos extends javax.swing.JFrame {
+    public static Diccionario dic = new Diccionario();
+    public static int cont = 0;
+    public static Palabra word = new Palabra();
+    public static String[] letras = new String[16];
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Interfaz_grafos.class.getName());
 
@@ -22,6 +26,7 @@ public class Interfaz_grafos extends javax.swing.JFrame {
      * Creates new form Interfaz_grafos
      */
     public Interfaz_grafos() {
+        this.setVisible(true);
         initComponents();
     }
 
@@ -43,7 +48,6 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         cargar_dic = new javax.swing.JButton();
         arbol_bfs = new javax.swing.JButton();
         palabra_arbol = new javax.swing.JComboBox<>();
-        palabra_busq = new javax.swing.JTextField();
         DFS = new javax.swing.JButton();
         BFS = new javax.swing.JButton();
         letra1 = new javax.swing.JLabel();
@@ -62,6 +66,8 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         letra14 = new javax.swing.JLabel();
         letra15 = new javax.swing.JLabel();
         letra16 = new javax.swing.JLabel();
+        exit = new javax.swing.JButton();
+        pal_bus = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -103,6 +109,7 @@ public class Interfaz_grafos extends javax.swing.JFrame {
         });
         getContentPane().add(cargar_dic, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 240, 160, -1));
 
+        arbol_bfs.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         arbol_bfs.setText("Arbol de recorrido BFS");
         getContentPane().add(arbol_bfs, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 160, -1));
 
@@ -113,9 +120,6 @@ public class Interfaz_grafos extends javax.swing.JFrame {
             }
         });
         getContentPane().add(palabra_arbol, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, 70, -1));
-
-        palabra_busq.setText("jTextField1");
-        getContentPane().add(palabra_busq, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 290, 90, -1));
 
         DFS.setText("DFS");
         getContentPane().add(DFS, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
@@ -130,99 +134,98 @@ public class Interfaz_grafos extends javax.swing.JFrame {
 
         letra1.setBackground(new java.awt.Color(121, 124, 126));
         letra1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra1.setText("jLabel1");
         letra1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 50, 50));
 
         letra2.setBackground(new java.awt.Color(121, 124, 126));
         letra2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra2.setText("jLabel1");
         letra2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 50, 50));
 
         letra3.setBackground(new java.awt.Color(121, 124, 126));
         letra3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra3.setText("jLabel1");
         letra3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 50, 50));
 
         letra4.setBackground(new java.awt.Color(121, 124, 126));
         letra4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra4.setText("jLabel1");
         letra4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 50, 50));
 
         letra5.setBackground(new java.awt.Color(121, 124, 126));
         letra5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra5.setText("jLabel1");
         letra5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 50, 50));
 
         letra6.setBackground(new java.awt.Color(121, 124, 126));
         letra6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra6.setText("jLabel1");
         letra6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 80, 50, 50));
 
         letra7.setBackground(new java.awt.Color(121, 124, 126));
         letra7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra7.setText("jLabel1");
         letra7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 50, 50));
 
         letra8.setBackground(new java.awt.Color(121, 124, 126));
         letra8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra8.setText("jLabel1");
         letra8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 50, 50));
 
         letra9.setBackground(new java.awt.Color(121, 124, 126));
         letra9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra9.setText("jLabel1");
         letra9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 50, 50));
 
         letra10.setBackground(new java.awt.Color(121, 124, 126));
         letra10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra10.setText("jLabel1");
         letra10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 50, 50));
 
         letra11.setBackground(new java.awt.Color(121, 124, 126));
         letra11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra11.setText("jLabel1");
         letra11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra11, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 50, 50));
 
         letra12.setBackground(new java.awt.Color(121, 124, 126));
         letra12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra12.setText("jLabel1");
         letra12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra12, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 130, 50, 50));
 
         letra13.setBackground(new java.awt.Color(121, 124, 126));
         letra13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra13.setText("jLabel1");
         letra13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 50, 50));
 
         letra14.setBackground(new java.awt.Color(121, 124, 126));
         letra14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra14.setText("jLabel1");
         letra14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra14, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 50, 50));
 
         letra15.setBackground(new java.awt.Color(121, 124, 126));
         letra15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra15.setText("jLabel1");
         letra15.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra15, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 50, 50));
 
         letra16.setBackground(new java.awt.Color(121, 124, 126));
         letra16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        letra16.setText("jLabel1");
         letra16.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(letra16, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 50, 50));
+
+        exit.setText("X");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+        getContentPane().add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, -1));
+
+        pal_bus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pal_busActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pal_bus, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 90, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -232,26 +235,63 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     }//GEN-LAST:event_palabra_arbolActionPerformed
 
     private void busq_genActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busq_genActionPerformed
-        int cont = 1;
+        cont = 1;
     }//GEN-LAST:event_busq_genActionPerformed
 
     private void cargar_dicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargar_dicActionPerformed
-        Diccionario dic = new Diccionario();
-        dic = dic.subir_dic();
+        letras = dic.subir_dic();
+        this.letra1.setText(letras[0]);
+        this.letra2.setText(letras[1]);
+        this.letra3.setText(letras[2]);
+        this.letra4.setText(letras[3]);
+        this.letra5.setText(letras[4]);
+        this.letra6.setText(letras[5]);
+        this.letra7.setText(letras[6]);
+        this.letra8.setText(letras[7]);
+        this.letra9.setText(letras[8]);
+        this.letra10.setText(letras[9]);
+        this.letra11.setText(letras[10]);
+        this.letra12.setText(letras[11]);
+        this.letra13.setText(letras[12]);
+        this.letra14.setText(letras[13]);
+        this.letra15.setText(letras[14]);
+        this.letra16.setText(letras[15]);
+        String algo = dic.mostrarPalabras();
+        this.mostrar_dic.setText(algo);
     }//GEN-LAST:event_cargar_dicActionPerformed
 
     private void busq_espActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busq_espActionPerformed
-        int cont = 2;
+        cont = 2;
     }//GEN-LAST:event_busq_espActionPerformed
 
     private void BFSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BFSActionPerformed
         if(cont == 1){
             Palabra pointer = new Palabra();
+            pointer = dic.p_first;
             while(pointer.sig != null){
                 dic.BFS(pointer);
+                if(pointer.encontrada == true){
+                    this.palabra_arbol.addItem(pointer.info);
+                }
+                pointer = pointer.sig;
+            }
+        }
+        if(cont == 2){
+            dic.existe(word);
+            dic.BFS(word);
+            if(word.encontrada == true){
+                this.palabra_arbol.addItem(word.info);
             }
         }
     }//GEN-LAST:event_BFSActionPerformed
+
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_exitActionPerformed
+
+    private void pal_busActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pal_busActionPerformed
+        word.info = pal_bus.getText();
+    }//GEN-LAST:event_pal_busActionPerformed
 
     /**
      * @param args the command line arguments
@@ -285,6 +325,7 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     private javax.swing.JCheckBox busq_esp;
     private javax.swing.JCheckBox busq_gen;
     private javax.swing.JButton cargar_dic;
+    private javax.swing.JButton exit;
     private javax.swing.JButton guardar_dic;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane17;
@@ -305,7 +346,7 @@ public class Interfaz_grafos extends javax.swing.JFrame {
     private javax.swing.JLabel letra8;
     private javax.swing.JLabel letra9;
     private javax.swing.JTextArea mostrar_dic;
+    private javax.swing.JTextField pal_bus;
     private javax.swing.JComboBox<String> palabra_arbol;
-    private javax.swing.JTextField palabra_busq;
     // End of variables declaration//GEN-END:variables
 }

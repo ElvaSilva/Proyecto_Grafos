@@ -15,7 +15,7 @@ public class Palabra {
     long tiempo;
 
     public Palabra(String info) {
-        this.info = info;
+        this.info = info.toUpperCase();
         this.sig = null;
         this.encontrada = false;
         this.tiempo = 0;
@@ -27,6 +27,7 @@ public class Palabra {
         this.encontrada = false;
         this.tiempo = 0;
     }
+    
     
     
     

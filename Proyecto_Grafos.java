@@ -14,7 +14,8 @@ public class Proyecto_Grafos {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Interfaz_grafos ventana = new Interfaz_grafos();
+        ventana.setVisible(true);
     }
     
 }
