@@ -221,6 +221,10 @@ public class Diccionario {
         return texto;
     }
     
+    /**Se revisa cada palabra del diccionario y se compara con la proporcionada.
+     * 
+     * @param word 
+     */
     public void existe(Palabra word){
         boolean exist = false;
         Palabra aux = new Palabra();
@@ -239,6 +243,10 @@ public class Diccionario {
         }
     }
     
+    /**Se recorre el diccionario y se agrega la palabra a un texto.
+     * 
+     * @return String texto con todas las palabras
+     */
     public String mostrarPalabras(){
         Palabra aux = this.p_first;
         String text = "";
